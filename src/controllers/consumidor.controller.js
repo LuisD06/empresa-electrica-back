@@ -1,5 +1,33 @@
 import { getConnection } from "./../database/database";
+import { db } from "./../database/firebase";
+import { Medidor } from "./../models/Medidor";
 
+const createMedidor = async (req,res) => {
+    try {
+        const newMedidor = await Medidor.create({
+            corriente: 15
+        })
+        res.json(newMedidor);
+    } catch (error) {
+        res.status(500)
+        res.send(error.message);
+    }
+}
+
+const getData = async (req, res) => {
+    try {
+        console.log("Firebase");
+        var ref = db.ref("/");
+        ref.on("value", (snapshot) => {
+
+            return res.json(snapshot.val());
+        });
+
+    } catch (error) {
+        res.status(500)
+        res.send(error.message);
+    }
+}
 
 const login = async (req, res) => {
     try {
@@ -25,6 +53,7 @@ const login = async (req, res) => {
 
 const getConsumidor = async (req, res) => {
     try {
+        console.log("get");
         const { id } = req.params;
         if(id === undefined){
             res.status(400).json({ message: "Bad Request. Please fill all field" });
@@ -58,5 +87,7 @@ const addConsumidor = async (req, res) => {
 export const methods = {
     getConsumidor,
     addConsumidor,
-    login
+    login,
+    getData,
+    createMedidor
 };

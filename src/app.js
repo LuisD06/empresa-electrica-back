@@ -3,7 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 
 // Routes
-import consumidorRoutes from "./routes/consumidor.routes";
+import usuarioRoutes from "./routes/usuario.routes";
+import medidorRoutes from "./routes/medidor.routes";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cors({
 }));
 
 // Routes
-app.use("/api/consumidor",consumidorRoutes);
+app.use("/api/usuario",usuarioRoutes);
+app.use("/api/medidor",medidorRoutes)
 
 export default app;
