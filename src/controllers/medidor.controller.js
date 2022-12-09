@@ -15,6 +15,14 @@ const getAsync = async (req, res) => {
 }
 const getByDayAsync = async (req, res) => {
     try {
+        
+
+
+        // let medidorList = await Medidor.findAll({
+        //     order: [["date", "asc"]]
+        // });
+        // let obj = JSON.parse(JSON.stringify(medidorList[0]));
+        // console.log(obj);
         const {date } = req.body;
         console.log(typeof(date));
         let medidorList = [
@@ -28,14 +36,9 @@ const getByDayAsync = async (req, res) => {
             let dateString = meditorItem.date.split(" ")[0];
             return dateString === date;
         });
+        const listLength = medidorList.length;
+        medidorList = listLength > 24 ? medidorList.splice(listLength-24-1, listLength-1) : medidorList;
         console.log(medidorList);
-
-
-        // let medidorList = await Medidor.findAll({
-        //     order: [["date", "asc"]]
-        // });
-        // let obj = JSON.parse(JSON.stringify(medidorList[0]));
-        // console.log(obj);
         res.json(medidorList);
     } catch (error) {
         res.status(500)
