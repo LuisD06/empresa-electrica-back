@@ -27,20 +27,20 @@ const main = () => {
             const minutes = ("0" + date.getMinutes()).slice(-2);
             const seconds = ("0" + date.getSeconds()).slice(-2);
             const dateString = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
-            Medidor.create({
-                corriente: snapshot.val().Corriente,
-                energia: snapshot.val().Energia,
-                factor: snapshot.val().Factor,
-                latitud: snapshot.val().Latitud,
-                longitud: snapshot.val().Longitud,
-                power: snapshot.val().Power,
-                temperatura: snapshot.val().Temperatura,
-                voltaje: snapshot.val().Voltaje,
-                date: dateString,
-                suma: snapshot.val().Suma,
-                id: snapshot.val().Id
-            });
-            console.log("Medidor created");
+            // Medidor.create({
+            //     corriente: snapshot.val().Corriente,
+            //     energia: snapshot.val().Energia,
+            //     factor: snapshot.val().Factor,
+            //     latitud: snapshot.val().Latitud,
+            //     longitud: snapshot.val().Longitud,
+            //     power: snapshot.val().Power,
+            //     temperatura: snapshot.val().Temperatura,
+            //     voltaje: snapshot.val().Voltaje,
+            //     date: dateString,
+            //     suma: snapshot.val().Suma,
+            //     id: snapshot.val().Id
+            // });
+            // console.log("Medidor created");
             ws.send(JSON.stringify({ ...snapshot.val(), date: dateString }));
         });
         ws.on('close', () => {
