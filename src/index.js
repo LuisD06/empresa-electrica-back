@@ -24,21 +24,23 @@ const main = () => {
             const month = ("0" + (date.getMonth() + 1)).slice(-2);
             const day = ("0" + date.getDate()).slice(-2);
             const hours = ("0" + date.getHours()).slice(-2);
-            const minutes = ("0"+date.getMinutes()).slice(-2);
-            const seconds = ("0"+date.getSeconds()).slice(-2);
+            const minutes = ("0" + date.getMinutes()).slice(-2);
+            const seconds = ("0" + date.getSeconds()).slice(-2);
             const dateString = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
-            console.log(snapshot.val().Power);
             Medidor.create({
                 corriente: snapshot.val().Corriente,
                 energia: snapshot.val().Energia,
-                factorPotencia: 0,
+                factor: snapshot.val().Factor,
                 latitud: snapshot.val().Latitud,
                 longitud: snapshot.val().Longitud,
                 power: snapshot.val().Power,
                 temperatura: snapshot.val().Temperatura,
                 voltaje: snapshot.val().Voltaje,
-                date: dateString
+                date: dateString,
+                suma: snapshot.val().Suma,
+                id: snapshot.val().Id
             });
+            console.log("Medidor created");
             ws.send(JSON.stringify({ ...snapshot.val(), date: dateString }));
         });
         ws.on('close', () => {

@@ -15,32 +15,84 @@ const getAsync = async (req, res) => {
 }
 const getByDayAsync = async (req, res) => {
     try {
+        const { date } = req.body;
+
+
+        let medidorList = await Medidor.findAll({
+            order: [["date", "asc"]]
+        });
+
+        const medidorResList = JSON.parse(JSON.stringify(medidorList));
+        
+        
+        medidorList = medidorResList.filter(meditorItem => {
+            let dateString = meditorItem.data.date.split(" ")[0];
+            return dateString === date;
+        });
+
+        let medidorDates = medidorList.map(medidorItem => {
+            const [dateValues, timeValues] = medidorItem.data.date.split(" ");
+            const [year, month, day] = dateValues.split("-");
+            const [hours, minutes, seconds] = timeValues.split("-");
+            const dateObj = new Date(year, month - 1, day, hours, minutes, seconds);
+            return ({...medidorItem, data: {...medidorItem.data, date: dateObj}});
+        });
+
+
+
+        let newList = [];
+        newList = medidorDates.filter((medidorItem, index)  => 
+            index === medidorDates.findIndex(
+                item => item.data.date.getHours() === medidorItem.data.date.getHours()
+            )
+        );
+
         
 
 
-        // let medidorList = await Medidor.findAll({
-        //     order: [["date", "asc"]]
-        // });
-        // let obj = JSON.parse(JSON.stringify(medidorList[0]));
-        // console.log(obj);
-        const {date } = req.body;
-        console.log(typeof(date));
-        let medidorList = [
-            {date: "2022-12-25 15:26:12"},
-            {date: "2022-12-25 16:26:12"},
-            {date: "2022-12-25 17:26:12"},
-            {date: "2022-12-25 18:26:12"},
-            {date: "2022-12-25 19:26:12"},
-        ];
-        medidorList = medidorList.filter(meditorItem => {
-            let dateString = meditorItem.date.split(" ")[0];
-            return dateString === date;
-        });
-        const listLength = medidorList.length;
-        medidorList = listLength > 24 ? medidorList.splice(listLength-24-1, listLength-1) : medidorList;
-        console.log(medidorList);
-        res.json(medidorList);
+        res.json(newList);
     } catch (error) {
+        console.log(error);
+        res.status(500)
+        res.send(error.message);
+    }
+}
+const getByMonthAsync = async (req, res) => {
+    try {
+        const { date } = req.body;
+
+
+        let medidorList = await Medidor.findAll({
+            order: [["date", "asc"]]
+        });
+        const medidorResList = JSON.parse(JSON.stringify(medidorList));
+        
+        
+        medidorList = medidorResList.filter(meditorItem => {
+            const [dateValues, timeValues] = meditorItem.data.date.split(" ");
+            return dateValues.startsWith(date);
+        });
+
+        let medidorDates = medidorList.map(medidorItem => {
+            const [dateValues, timeValues] = medidorItem.data.date.split(" ");
+            const [year, month, day] = dateValues.split("-");
+            const [hours, minutes, seconds] = timeValues.split("-");
+            const dateObj = new Date(year, month - 1, day, hours, minutes, seconds);
+            return ({...medidorItem, data: {...medidorItem.data, date: dateObj}});
+        });
+
+        
+
+        let newList = [];
+        newList = medidorDates.filter((medidorItem, index)  => 
+            index === medidorDates.findIndex(
+                item => item.data.date.getDay() === medidorItem.data.date.getDay()
+            )
+        );
+
+        res.json(newList);
+    } catch (error) {
+        console.log(error);
         res.status(500)
         res.send(error.message);
     }
@@ -48,5 +100,6 @@ const getByDayAsync = async (req, res) => {
 
 export const methods = {
     getAsync,
-    getByDayAsync
+    getByDayAsync,
+    getByMonthAsync
 }
