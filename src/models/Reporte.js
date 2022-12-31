@@ -1,17 +1,63 @@
 import { defineModel, DataTypes } from "firestore-sequelize";
-const Medidor = defineModel("reporte", {
-    corriente: DataTypes.NUMBER,
-    energia: DataTypes.STRING,
-    factor: DataTypes.NUMBER,
-    latitud: DataTypes.STRING,
-    longitud: DataTypes.STRING,
-    power: DataTypes.STRING,
-    temperatura: DataTypes.NUMBER,
-    voltaje: DataTypes.NUMBER,
-    date: DataTypes.STRING,
-    suma: DataTypes.NUMBER
+const Reporte = defineModel("reporte", {
+  id: {
+    type: 'string',
+    required: true
+  },
+  cedula: {
+    type: 'string',
+    required: true
+  },
+  correo: {
+    type: 'string',
+    required: true
+  },
+  direccion: {
+    type: 'string',
+    required: true
+  },
+  telefono: {
+    type: 'string',
+    required: true
+  },
+  idMedidor: {
+    type: 'string',
+    required: true
+  },
+  latlng: {
+    type: 'string',
+    required: true
+  },
+  numeroMedidor: {
+    type: 'string',
+    required: true
+  },
+  servicio: {
+    type: 'string',
+    required: true
+  },
+  tipoMedidor: {
+    type: 'string',
+    required: true
+  },
+  suministro: {
+    type: 'string',
+    required: true
+  },
+  consumo: {
+    type: 'number',
+    required: true
+  },
+  total: {
+    type: 'number',
+    required: true
+  },
+  fecha: {
+    type: 'string',
+    required: true
+  }
 })
 
 module.exports = {
-  Medidor
+  Reporte
 }

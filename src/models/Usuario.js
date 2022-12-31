@@ -1,5 +1,9 @@
 import { defineModel, DataTypes } from "firestore-sequelize";
 const Usuario = defineModel("usuario", {
+    id: {
+        type: DataTypes.STRING,
+        required: true
+    },
     nombre: {
         type: DataTypes.STRING,
         required: true
@@ -28,7 +32,7 @@ const Usuario = defineModel("usuario", {
     clave: {
         type: DataTypes.STRING,
         required: true
-    }
+    },
 })
 
 module.exports = {

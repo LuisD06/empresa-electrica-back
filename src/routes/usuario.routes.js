@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", usuarioController.createAsync);
 router.post("/login", usuarioController.loginAsync);
+router.post("/operator", usuarioController.createOperatorAsync);
 
 
 

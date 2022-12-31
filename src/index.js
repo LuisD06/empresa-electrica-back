@@ -3,6 +3,7 @@ import { Server } from "ws";
 import { db } from "./database/firebase";
 import { Medidor } from "./models/Medidor";
 import { v4 as uuidv4 } from 'uuid';
+
 const main = () => {
     const server = require("http").createServer(app);
     const socketServer = new Server({ server: server });
@@ -27,6 +28,14 @@ const main = () => {
             const minutes = ("0" + date.getMinutes()).slice(-2);
             const seconds = ("0" + date.getSeconds()).slice(-2);
             const dateString = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
+
+            const currentDay = date.getDate();
+            const monthDate = new Date(date.getFullYear(), date.getMonth()+1,0);
+
+            if (currentDay === monthDate.getDate()) {
+                console.log("último día del mes");
+
+            }
             // Medidor.create({
             //     corriente: snapshot.val().Corriente,
             //     energia: snapshot.val().Energia,
@@ -38,7 +47,7 @@ const main = () => {
             //     voltaje: snapshot.val().Voltaje,
             //     date: dateString,
             //     suma: snapshot.val().Suma,
-            //     id: snapshot.val().Id
+            //     id: snapshot.val().ID
             // });
             // console.log("Medidor created");
             ws.send(JSON.stringify({ ...snapshot.val(), date: dateString }));
@@ -47,9 +56,9 @@ const main = () => {
             clients.delete(ws);
         });
     });
-    server.listen(4000);
+    server.listen(4001);
     // app.listen(app.get("port"));
-    console.log(`Server on port ${4000}`);
+    console.log(`Server on port ${4001}`);
 }
 
 main();

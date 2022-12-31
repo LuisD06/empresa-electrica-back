@@ -5,11 +5,13 @@ import cors from "cors";
 // Routes
 import usuarioRoutes from "./routes/usuario.routes";
 import medidorRoutes from "./routes/medidor.routes";
+import medicionRoutes from "./routes/medicion.routes";
+import reporteRoutes from "./routes/reporte.routes";
 
 const app = express();
 
 // Settings
-app.set("port", 4000);
+app.set("port", 4001);
 app.use(express.json());
 
 // Middlewates
@@ -22,6 +24,8 @@ app.use(cors({
 
 // Routes
 app.use("/api/usuario",usuarioRoutes);
-app.use("/api/medidor",medidorRoutes)
+app.use("/api/medidor",medidorRoutes);
+app.use("/api/medicion",medicionRoutes);
+app.use("/api/reporte",reporteRoutes);
 
 export default app;
