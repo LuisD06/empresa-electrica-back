@@ -91,7 +91,20 @@ const createReport = async (req, res) => {
     res.send(error.message);
   }
 }
+const getAll = async (req, res) => {
+  try {
+    const response = await Reporte.findAll({});
+    const reportListEntity = JSON.parse(JSON.stringify(response));
+    const reportList = reportListEntity.map((report) => report.data);
+    res.json(reportList);
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
 export const methods = {
   getByMonth,
-  createReport
+  createReport,
+  getAll
 }

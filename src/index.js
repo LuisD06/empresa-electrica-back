@@ -1,7 +1,7 @@
 import app from "./app";
 import { Server } from "ws";
 import { db } from "./database/firebase";
-import { Medidor } from "./models/Medidor";
+import { Medicion } from "./models/Medicion";
 import { v4 as uuidv4 } from 'uuid';
 
 const main = () => {
@@ -10,14 +10,12 @@ const main = () => {
     const clients = new Map();
 
     socketServer.on('connection', (ws) => {
-        
-        console.log("Client connected");
+    
         const id = uuidv4();
         const color = Math.floor(Math.random() * 360);
         const metadata = { id, color };
 
         clients.set(ws, metadata);
-        console.log(clients.size);
         const ref = db.ref("/");
         ref.on("value", (snapshot) => {
             const date = new Date();
@@ -29,27 +27,20 @@ const main = () => {
             const seconds = ("0" + date.getSeconds()).slice(-2);
             const dateString = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
 
-            const currentDay = date.getDate();
-            const monthDate = new Date(date.getFullYear(), date.getMonth()+1,0);
 
-            if (currentDay === monthDate.getDate()) {
-                console.log("último día del mes");
-
-            }
-            // Medidor.create({
-            //     corriente: snapshot.val().Corriente,
-            //     energia: snapshot.val().Energia,
-            //     factor: snapshot.val().Factor,
-            //     latitud: snapshot.val().Latitud,
-            //     longitud: snapshot.val().Longitud,
-            //     power: snapshot.val().Power,
-            //     temperatura: snapshot.val().Temperatura,
-            //     voltaje: snapshot.val().Voltaje,
-            //     date: dateString,
-            //     suma: snapshot.val().Suma,
-            //     id: snapshot.val().ID
-            // });
-            // console.log("Medidor created");
+            Medicion.create({
+                corriente: snapshot.val().Corriente,
+                energia: snapshot.val().Energia,
+                factor: snapshot.val().Factor,
+                latitud: snapshot.val().Latitud,
+                longitud: snapshot.val().Longitud,
+                power: snapshot.val().Power,
+                temperatura: snapshot.val().Temperatura,
+                voltaje: snapshot.val().Voltaje,
+                date: dateString,
+                suma: snapshot.val().Suma,
+                id: snapshot.val().ID
+            });
             ws.send(JSON.stringify({ ...snapshot.val(), date: dateString }));
         });
         ws.on('close', () => {
