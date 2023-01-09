@@ -47,7 +47,7 @@ const main = () => {
             clients.delete(ws);
         });
     });
-    server.listen(4001);
+    server.listen(4000);
     // app.listen(app.get("port"));
     console.log(`Server on port ${4001}`);
 }
