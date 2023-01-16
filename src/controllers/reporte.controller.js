@@ -48,47 +48,58 @@ const getByMonth = async (req, res) => {
 const createReport = async (req, res) => {
   try {
     const { id, date } = req.body;
-    const usuarioEntity = await Usuario.findOne({
+    const reportExists = await Reporte.findOne({
       where: {
-        cedula: {
-          '==': id
+        fecha: {
+          '==':date
         }
       }
     })
-    const usuarioObject = JSON.parse(JSON.stringify(usuarioEntity)).data;
-    const medidorEntity = await Medidor.findOne({
-      where: {
-        usuario: usuarioObject.id 
+    if (reportExists === null) {
+      const usuarioEntity = await Usuario.findOne({
+        where: {
+          cedula: {
+            '==': id
+          }
+        }
+      })
+      const usuarioObject = JSON.parse(JSON.stringify(usuarioEntity)).data;
+      const medidorEntity = await Medidor.findOne({
+        where: {
+          usuario: usuarioObject.id 
+        }
+      })
+      const medidorObject = JSON.parse(JSON.stringify(medidorEntity)).data;
+      const idReporte = uuidv4();
+      const ref = db.ref('/');
+      const dataEntity = await ref.once('value').then((snapshot) => {
+        return snapshot;
+      })
+      const data = dataEntity.val();
+      const report = {
+        id: idReporte,
+        cedula: usuarioObject.cedula,
+        correo: usuarioObject.correo,
+        direccion: usuarioObject.direccion,
+        telefono: usuarioObject.telefono,
+        idMedidor: medidorObject.id,
+        latlng: `${medidorObject.lat},${medidorObject.lng}`,
+        numeroMedidor: medidorObject.numero,
+        servicio: medidorObject.servicio,
+        tipoMedidor: medidorObject.tipo,
+        suministro: medidorObject.suministro,
+        consumo: data.Suma,
+        total: (0.092 * data.Suma) / 100,
+        fecha: date
       }
-    })
-    const medidorObject = JSON.parse(JSON.stringify(medidorEntity)).data;
-    const idReporte = uuidv4();
-    const ref = db.ref('/');
-    const dataEntity = await ref.once('value').then((snapshot) => {
-      return snapshot;
-    })
-    const data = dataEntity.val();
-    const report = {
-      id: idReporte,
-      cedula: usuarioObject.cedula,
-      correo: usuarioObject.correo,
-      direccion: usuarioObject.direccion,
-      telefono: usuarioObject.telefono,
-      idMedidor: medidorObject.id,
-      latlng: `${medidorObject.lat},${medidorObject.lng}`,
-      numeroMedidor: medidorObject.numero,
-      servicio: medidorObject.servicio,
-      tipoMedidor: medidorObject.tipo,
-      suministro: medidorObject.suministro,
-      consumo: data.Suma,
-      total: (0.092 * data.Suma) / 100,
-      fecha: date
+      const reportEntity = await Reporte.create(report);
+      res.json(reportEntity);
+    }else {
+      res.status(400).json({message: 'No se puede crear dos reportes para una misma fecha'})
     }
-    const reportEntity = await Reporte.create(report);
-    res.json(reportEntity);
   } catch (error) {
     res.status(500);
-    res.send(error.message);
+    res.json({message: 'Ha ocurrido un error inesperadp'});
   }
 }
 const getAll = async (req, res) => {
