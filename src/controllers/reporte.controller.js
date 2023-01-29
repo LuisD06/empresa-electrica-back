@@ -1,7 +1,7 @@
-import { Reporte } from './../models/Reporte';
-import { Medidor } from './../models/Medidor';
-import { Usuario } from './../models/Usuario';
-import { db } from './../database/firebase';
+import { Reporte } from './../models/Reporte.js';
+import { Medidor } from './../models/Medidor.js';
+import { Usuario } from './../models/Usuario.js';
+import { db } from './../database/firebase.js';
 import { v4 as uuidv4 } from 'uuid';
 const getByMonth = async (req, res) => {
   try {
@@ -102,6 +102,66 @@ const createReport = async (req, res) => {
     res.json({message: 'Ha ocurrido un error inesperadp'});
   }
 }
+const createReportByMedidor = async (req, res) => {
+  try {
+    const { numero, date } = req.body;
+    const reportExists = await Reporte.findOne({
+      where: {
+        fecha: {
+          '==':date
+        }
+      }
+    })
+    if (reportExists === null) {
+      const medidor = await Medidor.findOne({
+        where: {
+          numero: numero
+        }
+      })
+      if (medidor !== null) {
+        const medidorObject = JSON.parse(JSON.stringify(medidor)).data;
+        const usuarioEntity = await Usuario.findOne({
+          where: {
+            id: {
+              '==': medidorObject.usuario
+            }
+          }
+        })
+        const usuarioObject = JSON.parse(JSON.stringify(usuarioEntity)).data;
+        const idReporte = uuidv4();
+        const ref = db.ref('/');
+        const dataEntity = await ref.once('value').then((snapshot) => {
+          return snapshot;
+        })
+        const data = dataEntity.val();
+        const report = {
+          id: idReporte,
+          cedula: usuarioObject.cedula,
+          correo: usuarioObject.correo,
+          direccion: usuarioObject.direccion,
+          telefono: usuarioObject.telefono,
+          idMedidor: medidorObject.id,
+          latlng: `${medidorObject.lat},${medidorObject.lng}`,
+          numeroMedidor: medidorObject.numero,
+          servicio: medidorObject.servicio,
+          tipoMedidor: medidorObject.tipo,
+          suministro: medidorObject.suministro,
+          consumo: data.Suma,
+          total: (0.092 * data.Suma) / 100,
+          fecha: date
+        }
+        const reportEntity = await Reporte.create(report);
+        res.json(reportEntity);
+      }
+    }else {
+      res.status(400).json({message: 'No se puede crear dos reportes para una misma fecha'})
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json({message: 'Ha ocurrido un error inesperadp'});
+  }
+}
 const getAll = async (req, res) => {
   try {
     const response = await Reporte.findAll({});
@@ -117,5 +177,6 @@ const getAll = async (req, res) => {
 export const methods = {
   getByMonth,
   createReport,
-  getAll
+  getAll,
+  createReportByMedidor
 }

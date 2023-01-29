@@ -3,10 +3,10 @@ import morgan from "morgan";
 import cors from "cors";
 
 // Routes
-import usuarioRoutes from "./routes/usuario.routes";
-import medidorRoutes from "./routes/medidor.routes";
-import medicionRoutes from "./routes/medicion.routes";
-import reporteRoutes from "./routes/reporte.routes";
+import usuarioRoutes from "./routes/usuario.routes.js";
+import medidorRoutes from "./routes/medidor.routes.js";
+import medicionRoutes from "./routes/medicion.routes.js";
+import reporteRoutes from "./routes/reporte.routes.js";
 
 const app = express();
 

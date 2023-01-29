@@ -10,7 +10,7 @@ admin.initializeApp({
     databaseURL: "https://medidor-d9e02-default-rtdb.firebaseio.com"
 })
 
-const db = getDatabase();
+export const db = getDatabase();
 
 sequelize.initializeApp(admin);
 

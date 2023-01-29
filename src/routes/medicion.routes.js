@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { methods as medicionController } from "../controllers/medicion.controller";
+import { methods as medicionController } from "../controllers/medicion.controller.js";
 
 const router = Router();
 

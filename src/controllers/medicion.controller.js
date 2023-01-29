@@ -1,4 +1,4 @@
-import { Medicion } from "./../models/Medicion";
+import { Medicion } from "./../models/Medicion.js";
 
 const getAsync = async (req, res) => {
   try {

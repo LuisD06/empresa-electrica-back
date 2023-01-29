@@ -1,5 +1,5 @@
 import { defineModel, DataTypes } from "firestore-sequelize";
-const Medicion = defineModel("medicion", {
+export const Medicion = defineModel("medicion", {
   corriente: DataTypes.NUMBER,
   energia: DataTypes.STRING,
   factor: DataTypes.NUMBER,
@@ -12,7 +12,3 @@ const Medicion = defineModel("medicion", {
   suma: DataTypes.NUMBER,
   id: DataTypes.NUMBER
 })
-
-module.exports = {
-  Medicion
-}

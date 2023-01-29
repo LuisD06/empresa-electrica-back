@@ -1,7 +1,7 @@
-import app from "./app";
+import app from "./app.js";
 import { Server } from "ws";
-import { db } from "./database/firebase";
-import { Medicion } from "./models/Medicion";
+import { db } from "./database/firebase.js";
+import { Medicion } from "./models/Medicion.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const main = () => {

@@ -1,5 +1,5 @@
 import { defineModel, DataTypes } from "firestore-sequelize";
-const Reporte = defineModel("reporte", {
+export const Reporte = defineModel("reporte", {
   id: {
     type: 'string',
     required: true
@@ -57,7 +57,3 @@ const Reporte = defineModel("reporte", {
     required: true
   }
 })
-
-module.exports = {
-  Reporte
-}

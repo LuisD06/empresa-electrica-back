@@ -1,4 +1,4 @@
-import { Medidor } from "./../models/Medidor";
+import { Medidor } from "./../models/Medidor.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const createAsync = async (req, res) => {
@@ -40,7 +40,70 @@ const getAsync = async (req, res) => {
     }
 }
 
+const getBySuministroAsync = async(req,res) => {
+    try {       
+        const { suministro }  = req.params;
+        const medidorList = await Medidor.findAll({
+            where: {
+                suministro: {
+                    '==': suministro
+                },
+                status: {
+                    '==': 'available'
+                }
+            }
+        });
+        console.log(medidorList);
+        if (medidorList.length > 0) {
+            const listObject = JSON.parse(JSON.stringify(medidorList));
+            res.status(200).json({
+                data: listObject
+            })
+
+        }else {
+            res.status(400).send({
+                message: 'No existen medidores disponibles con este suministro'
+            })
+        }
+    } catch (error) {
+        res.status(500);
+        res.send({
+            message: "Ha ocurrido un error inesperado"
+        })
+    }
+}
+
+const getInstancesByClient = async (req, res) => {
+    try {
+        const { usuario } = req.params;
+        console.log(usuario);
+        const medidorList = await Medidor.findAll({
+            where: {
+                usuario: {
+                    '==': usuario
+                }
+            }
+        })
+        if (medidorList !== null) {
+            res.status(200).json({
+                data: medidorList
+            });
+        } else {
+            res.status(400).send({
+                message: 'El cliente no tiene medidores registrados'
+            })
+        }
+    } catch (error) {
+        res.status(500);
+        res.send({
+            message: "Ha ocurrido un error inesperado"
+        })
+    }
+}
+
 export const methods = {
     createAsync,
-    getAsync
+    getAsync,
+    getBySuministroAsync,
+    getInstancesByClient
 }

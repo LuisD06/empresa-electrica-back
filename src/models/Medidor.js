@@ -1,5 +1,5 @@
 import { defineModel, DataTypes } from "firestore-sequelize";
-const Medidor = defineModel("medidor", {
+export const Medidor = defineModel("medidor", {
     id: {
         type: 'string',
         required: true
@@ -34,6 +34,3 @@ const Medidor = defineModel("medidor", {
     }
 })
 
-module.exports = {
-    Medidor
-}
