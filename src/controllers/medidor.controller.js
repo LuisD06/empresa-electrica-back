@@ -1,5 +1,5 @@
-import { Medidor } from "./../models/Medidor.js";
-import { v4 as uuidv4 } from 'uuid';
+const Medidor = require("./../models/Medidor.js").Medidor
+const v4 = require("uuid").v4;
 
 const createAsync = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ const createAsync = async (req, res) => {
             lat: lat,
             lng: lng,
             servicio: servicio,
-            id: uuidv4(),
+            id: v4(),
             status: 'available'
         }
         const medidorResult = Medidor.create(newMedidor);
@@ -101,9 +101,12 @@ const getInstancesByClient = async (req, res) => {
     }
 }
 
-export const methods = {
+const methods = {
     createAsync,
     getAsync,
     getBySuministroAsync,
     getInstancesByClient
+}
+module.exports = {
+    methods
 }

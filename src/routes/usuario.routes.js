@@ -1,15 +1,15 @@
-import { Router } from "express";
-import { methods as usuarioController } from "../controllers/usuario.controller.js";
-
-const router = Router();
-
-router.post("/", usuarioController.createAsync);
-router.post("/login", usuarioController.loginAsync);
-router.post("/operator", usuarioController.createOperatorAsync);
-router.post("/verify", usuarioController.verifyExists);
-router.get("/:cedula", usuarioController.getByCedula);
-router.post("/medidor", usuarioController.addMedidor);
+const express  = require("express");
+const router = express.Router()
+const methods = require( "../controllers/usuario.controller.js");
 
 
 
-export default router;
+router.post("/", methods.methods.createAsync);
+router.post("/login", methods.methods.loginAsync);
+router.post("/operator", methods.methods.createOperatorAsync);
+router.post("/verify", methods.methods.verifyExists);
+router.get("/:cedula", methods.methods.getByCedula);
+router.post("/medidor", methods.methods.addMedidor);
+
+
+module.exports = {router};

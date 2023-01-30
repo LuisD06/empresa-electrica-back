@@ -1,8 +1,8 @@
-import app from "./app.js";
-import { Server } from "ws";
-import { db } from "./database/firebase.js";
-import { Medicion } from "./models/Medicion.js";
-import { v4 as uuidv4 } from 'uuid';
+const app = require("./app.js").app;
+const Server = require("ws").Server;
+const db = require("./database/firebase.js").db
+const Medicion = require("./models/Medicion.js").Medicion;
+const v4 = require('uuid').v4;
 
 const main = () => {
     const server = require("http").createServer(app);
@@ -11,7 +11,7 @@ const main = () => {
 
     socketServer.on('connection', (ws) => {
     
-        const id = uuidv4();
+        const id = v4();
         const color = Math.floor(Math.random() * 360);
         const metadata = { id, color };
 

@@ -1,6 +1,7 @@
-import { Usuario } from "./../models/Usuario.js";
-import { Medidor } from "./../models/Medidor.js";
-import { v4 as uuidv4 } from 'uuid';
+
+const Usuario = require("./../models/Usuario.js").Usuario;
+const Medidor = require("./../models/Medidor.js").Medidor;
+const v4 = require("uuid").v4;
 const createAsync = async (req, res) => {
     try {
         const {
@@ -20,8 +21,10 @@ const createAsync = async (req, res) => {
                 }
             }
         })
-        if (usuarioExiste != null) {
-            const id = uuidv4();
+        console.log("Usuario existente:");
+        console.log(usuarioExiste);
+        if (usuarioExiste === null) {
+            const id = v4();
             const [lat, lng] = direccion.split(',');
             const newUsuario = {
                 id,
@@ -42,6 +45,7 @@ const createAsync = async (req, res) => {
                     }
                 }
             });
+            console.log(usuarioEntity);
             const medidorUpdate = await medidor.update({
                 usuario: usuarioObject.data.id,
                 lat: lat,
@@ -51,11 +55,13 @@ const createAsync = async (req, res) => {
             })
             res.json(usuarioEntity);
         } else {
+            console.log(400);
             res.status(400);
             res.send({message: 'El usuario con esa cédula ya está registrado'})
         }
     
     } catch (error) {
+        console.log(500);
         res.status(500)
         res.send(error.message);
     }
@@ -71,7 +77,7 @@ const createOperatorAsync = async (req, res) => {
             telefono,
             tipo
         } = req.body;
-        const id = uuidv4();
+        const id = v4();
         const [lat, lng] = direccion.split(',');
         const newUsuario = {
             id,
@@ -197,6 +203,7 @@ const getByCedula = async (req, res) => {
         }
     } catch (error) {
         res.status(500);
+        console.log(error);
         res.send({message: 'Ha ocurrido un problema inesperado'});
     }
 }
@@ -238,11 +245,15 @@ const addMedidor = async (req, res) => {
         })
     }
 }
-export const methods = {
+const methods = {
     createAsync,
     loginAsync,
     createOperatorAsync,
     verifyExists,
     getByCedula,
     addMedidor
+}
+
+module.exports = {
+    methods
 }

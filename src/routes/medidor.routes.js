@@ -1,11 +1,13 @@
-import { Router } from "express";
-import { methods as medidorController } from "../controllers/medidor.controller.js";
+const Router = require("express")
+const methods = require("../controllers/medidor.controller.js")
 
 const router = Router();
 
-router.post("/", medidorController.createAsync);
-router.get("/", medidorController.getAsync);
-router.get("/:suministro", medidorController.getBySuministroAsync);
-router.get("/usuario/:usuario", medidorController.getInstancesByClient);
+router.post("/", methods.methods.createAsync);
+router.get("/", methods.methods.getAsync);
+router.get("/:suministro", methods.methods.getBySuministroAsync);
+router.get("/usuario/:usuario", methods.methods.getInstancesByClient);
 
-export default router;
+module.exports = {
+  router
+}

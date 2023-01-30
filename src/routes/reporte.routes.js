@@ -1,11 +1,12 @@
-import { Router } from "express";
-import { methods as reporteController } from "../controllers/reporte.controller.js";
-
+const Router = require("express");
+const methods = require("../controllers/reporte.controller.js")
 const router = Router();
 
-router.post("/month", reporteController.getByMonth);
-router.get("/", reporteController.getAll);
-router.post("/", reporteController.createReport);
-router.post("/medidor", reporteController.createReportByMedidor);
+router.post("/month", methods.methods.getByMonth);
+router.get("/", methods.methods.getAll);
+router.post("/", methods.methods.createReport);
+router.post("/medidor", methods.methods.createReportByMedidor);
 
-export default router;
+module.exports = {
+  router
+}

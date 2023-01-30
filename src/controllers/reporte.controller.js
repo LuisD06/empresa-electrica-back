@@ -1,8 +1,8 @@
-import { Reporte } from './../models/Reporte.js';
-import { Medidor } from './../models/Medidor.js';
-import { Usuario } from './../models/Usuario.js';
-import { db } from './../database/firebase.js';
-import { v4 as uuidv4 } from 'uuid';
+const Reporte = require('./../models/Reporte.js').Reporte
+const Medidor = require('./../models/Medidor.js').Medidor
+const Usuario = require('./../models/Usuario.js').Usuario
+const db = require('./../database/firebase.js').db
+const v4 = require("uuid").v4
 const getByMonth = async (req, res) => {
   try {
     const { date } = req.body;
@@ -70,7 +70,7 @@ const createReport = async (req, res) => {
         }
       })
       const medidorObject = JSON.parse(JSON.stringify(medidorEntity)).data;
-      const idReporte = uuidv4();
+      const idReporte = v4();
       const ref = db.ref('/');
       const dataEntity = await ref.once('value').then((snapshot) => {
         return snapshot;
@@ -128,7 +128,7 @@ const createReportByMedidor = async (req, res) => {
           }
         })
         const usuarioObject = JSON.parse(JSON.stringify(usuarioEntity)).data;
-        const idReporte = uuidv4();
+        const idReporte = v4();
         const ref = db.ref('/');
         const dataEntity = await ref.once('value').then((snapshot) => {
           return snapshot;
@@ -174,9 +174,13 @@ const getAll = async (req, res) => {
   }
 }
 
-export const methods = {
+const methods = {
   getByMonth,
   createReport,
   getAll,
   createReportByMedidor
+}
+
+module.exports = {
+  methods
 }

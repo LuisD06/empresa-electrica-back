@@ -1,4 +1,4 @@
-import { Medicion } from "./../models/Medicion.js";
+const Medicion = require("./../models/Medicion.js").Medicion
 
 const getAsync = async (req, res) => {
   try {
@@ -152,9 +152,12 @@ const generateAsync = async (req, res) => {
   }
 }
 
-export const methods = {
+const methods = {
   getAsync,
   getByDayAsync,
   getByMonthAsync,
   generateAsync
+}
+module.exports = {
+  methods
 }

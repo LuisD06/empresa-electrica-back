@@ -1,17 +1,18 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+
 
 // Routes
-import usuarioRoutes from "./routes/usuario.routes.js";
-import medidorRoutes from "./routes/medidor.routes.js";
-import medicionRoutes from "./routes/medicion.routes.js";
-import reporteRoutes from "./routes/reporte.routes.js";
+const usuarioRoutes  = require("./routes/usuario.routes.js").router;
+const medidorRoutes  = require("./routes/medidor.routes.js").router;
+const medicionRoutes =  require("./routes/medicion.routes.js").router;
+const reporteRoutes  = require("./routes/reporte.routes.js").router;
 
 const app = express();
 
 // Settings
-app.set("port", 4001);
+app.set("port", 4000);
 app.use(express.json());
 
 // Middlewates
@@ -28,4 +29,6 @@ app.use("/api/medidor",medidorRoutes);
 app.use("/api/medicion",medicionRoutes);
 app.use("/api/reporte",reporteRoutes);
 
-export default app;
+module.exports = {
+    app
+}
