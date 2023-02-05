@@ -20,7 +20,7 @@ app.use(morgan("dev"));
 
 // Cors
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "http://100.26.18.167:3000/"
 }));
 
 // Routes
