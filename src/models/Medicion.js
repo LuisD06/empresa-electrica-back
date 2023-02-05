@@ -11,7 +11,8 @@ const Medicion = defineModel("medicion", {
   voltaje: DataTypes.NUMBER,
   date: DataTypes.STRING,
   suma: DataTypes.NUMBER,
-  id: DataTypes.NUMBER
+  id: DataTypes.NUMBER,
+  medidorId: DataTypes.STRING
 })
 module.exports = {
   Medicion

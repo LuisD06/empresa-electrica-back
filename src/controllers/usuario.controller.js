@@ -122,15 +122,15 @@ const loginAsync = async (req, res) => {
         const usuarioObject = JSON.parse(JSON.stringify(usuarioEntity)).data;
         let usuarioResponse = {};
         if (usuarioObject.tipo === 'cliente') {
-            const medidorentity = await Medidor.findOne({
+            const medidorentity = await Medidor.findAll({
                 where: {
                     usuario: {
                         '==': usuarioObject.id
                     }
                 }
             })
-            const medidorObject = JSON.parse(JSON.stringify(medidorentity)).data;
-            usuarioResponse = { ...usuarioObject, medidor: medidorObject };
+            const medidorObject = JSON.parse(JSON.stringify(medidorentity));
+            usuarioResponse = { ...usuarioObject, medidores: medidorObject };
         } else {
             usuarioResponse = usuarioObject;
         }

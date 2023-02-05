@@ -28,28 +28,32 @@ const main = () => {
             const dateString = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
 
 
-            Medicion.create({
-                corriente: snapshot.val().Corriente,
-                energia: snapshot.val().Energia,
-                factor: snapshot.val().Factor,
-                latitud: snapshot.val().Latitud,
-                longitud: snapshot.val().Longitud,
-                power: snapshot.val().Power,
-                temperatura: snapshot.val().Temperatura,
-                voltaje: snapshot.val().Voltaje,
-                date: dateString,
-                suma: snapshot.val().Suma,
-                id: snapshot.val().ID
-            });
+            // Medicion.create({
+            //     corriente: snapshot.val().Corriente,
+            //     energia: snapshot.val().Energia,
+            //     factor: snapshot.val().Factor,
+            //     latitud: snapshot.val().Latitud,
+            //     longitud: snapshot.val().Longitud,
+            //     power: snapshot.val().Power,
+            //     temperatura: snapshot.val().Temperatura,
+            //     voltaje: snapshot.val().Voltaje,
+            //     date: dateString,
+            //     suma: snapshot.val().Suma,
+            //     id: snapshot.val().ID,
+            //     medidorId: "c3f3604b-85f8-4e04-ad2f-f895cbf7090b"
+            // });
+
+            console.log("Data saved");
+
             ws.send(JSON.stringify({ ...snapshot.val(), date: dateString }));
         });
         ws.on('close', () => {
             clients.delete(ws);
         });
     });
-    server.listen(4000);
+    server.listen(4001);
     // app.listen(app.get("port"));
-    console.log(`Server on port ${4000}`);
+    console.log(`Server on port ${4001}`);
 }
 
 main();
