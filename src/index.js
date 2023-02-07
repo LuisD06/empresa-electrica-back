@@ -18,30 +18,32 @@ const main = () => {
         clients.set(ws, metadata);
         const ref = db.ref("/");
         ref.on("value", (snapshot) => {
-            const date = new Date();
+            const date = new Date(new Date().toLocaleString('es-EC'));
             const year = date.getFullYear();
             const month = ("0" + (date.getMonth() + 1)).slice(-2);
             const day = ("0" + date.getDate()).slice(-2);
             const hours = ("0" + date.getHours()).slice(-2);
             const minutes = ("0" + date.getMinutes()).slice(-2);
             const seconds = ("0" + date.getSeconds()).slice(-2);
-            const dateString = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
+            const dateString = `${year}-${day}-${month} ${hours}-${minutes}-${seconds}`;
+
+            console.log(date);
 
 
-            // Medicion.create({
-            //     corriente: snapshot.val().Corriente,
-            //     energia: snapshot.val().Energia,
-            //     factor: snapshot.val().Factor,
-            //     latitud: snapshot.val().Latitud,
-            //     longitud: snapshot.val().Longitud,
-            //     power: snapshot.val().Power,
-            //     temperatura: snapshot.val().Temperatura,
-            //     voltaje: snapshot.val().Voltaje,
-            //     date: dateString,
-            //     suma: snapshot.val().Suma,
-            //     id: snapshot.val().ID,
-            //     medidorId: "c3f3604b-85f8-4e04-ad2f-f895cbf7090b"
-            // });
+            Medicion.create({
+                corriente: snapshot.val().Corriente,
+                energia: snapshot.val().Energia,
+                factor: snapshot.val().Factor,
+                latitud: snapshot.val().Latitud,
+                longitud: snapshot.val().Longitud,
+                power: snapshot.val().Power,
+                temperatura: snapshot.val().Temperatura,
+                voltaje: snapshot.val().Voltaje,
+                date: dateString,
+                suma: snapshot.val().Suma,
+                id: snapshot.val().ID,
+                medidorId: "c3f3604b-85f8-4e04-ad2f-f895cbf7090b"
+            });
 
             console.log("Data saved");
 

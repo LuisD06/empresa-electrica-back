@@ -134,6 +134,7 @@ const getByMonthAsync = async (req, res) => {
 
         groupList[medidor] = newList;
       });
+      console.log(groupList);
       res.json(groupList);
 
     } else {

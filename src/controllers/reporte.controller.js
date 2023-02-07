@@ -1,6 +1,7 @@
 const Reporte = require('./../models/Reporte.js').Reporte
 const Medidor = require('./../models/Medidor.js').Medidor
 const Usuario = require('./../models/Usuario.js').Usuario
+const Medicion = require('./../models/Medicion.js').Medicion
 const db = require('./../database/firebase.js').db
 const v4 = require("uuid").v4
 const getByMonth = async (req, res) => {
@@ -108,7 +109,10 @@ const createReportByMedidor = async (req, res) => {
     const reportExists = await Reporte.findOne({
       where: {
         fecha: {
-          '==':date
+          '==': date
+        },
+        numeroMedidor: {
+          "==": numero
         }
       }
     })
@@ -129,11 +133,25 @@ const createReportByMedidor = async (req, res) => {
         })
         const usuarioObject = JSON.parse(JSON.stringify(usuarioEntity)).data;
         const idReporte = v4();
-        const ref = db.ref('/');
-        const dataEntity = await ref.once('value').then((snapshot) => {
-          return snapshot;
+        console.log(medidorObject);
+        const medicionList = await Medicion.findAll({
+          where: {
+            medidorId: {
+              "==": medidorObject.id
+            },
+            date: {
+              ">=": date,
+              "<=": date + '\uf8ff'
+            }
+          }
         })
-        const data = dataEntity.val();
+
+        const medicionListObject = JSON.parse(JSON.stringify(medicionList));
+
+        const orderedList = medicionListObject.sort((a,b) => (a.data.date < b.data.date) ? 1 : -1);
+        console.log(orderedList);
+        
+        const data = orderedList.at(0).data;
         const report = {
           id: idReporte,
           cedula: usuarioObject.cedula,
@@ -146,11 +164,12 @@ const createReportByMedidor = async (req, res) => {
           servicio: medidorObject.servicio,
           tipoMedidor: medidorObject.tipo,
           suministro: medidorObject.suministro,
-          consumo: data.Suma,
-          total: (0.092 * data.Suma) / 100,
+          consumo: data.suma,
+          total: (0.092 * data.suma) / 100,
           fecha: date
         }
         const reportEntity = await Reporte.create(report);
+        console.log(reportEntity);
         res.json(reportEntity);
       }
     }else {
@@ -159,7 +178,7 @@ const createReportByMedidor = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500);
-    res.json({message: 'Ha ocurrido un error inesperadp'});
+    res.json({message: 'Ha ocurrido un error inesperado'});
   }
 }
 const getAll = async (req, res) => {
